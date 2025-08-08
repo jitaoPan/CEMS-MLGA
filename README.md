@@ -16,4 +16,5 @@ If you wish to test IA-SSD with CEMS and MLGA modules, please use the following 
 ```
 python train.py --cfg_file --cfg_file cfgs/once_models/CA-SSD_cams.yaml 
 ```
-The voxel-based code is currently being integrated into the unified project, as it was adapted from the SAFDNet open-source implementation. Please stay tuned for updates.
+
+[//]: # (The voxel-based code is currently being integrated into the unified project, as it was adapted from the SAFDNet open-source implementation. Please stay tuned for updates.)
