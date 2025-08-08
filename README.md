@@ -1,6 +1,8 @@
-##CEMS & MLGA
-![img.png](img.png)
+## CEMS & MLGA
+
 This is the open-source code for the paper "Class-Enhanced Multi-Sampling and Multi-Level Graph Attention for 3D Object Detection."
+
+![img.png](img.png)
 
 This project is based on OpenPCDet. So please refer to INSTALL.md and GETTING_STARTED.md for the installation and usage, respectively
 
