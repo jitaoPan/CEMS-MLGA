@@ -1,18 +1,17 @@
-[//]: # (## 测试IA-SSD)
+##CEMS & MLGA
+![img.png](img.png)
+This is the open-source code for the paper "Class-Enhanced Multi-Sampling and Multi-Level Graph Attention for 3D Object Detection."
 
-[//]: # (```shell)
+This project is based on OpenPCDet. So please refer to INSTALL.md and GETTING_STARTED.md for the installation and usage, respectively
 
-[//]: # (--cfg_file cfgs/once_models/IA-SSD-ctr_aware.yaml --ckpt /home/hdwu/qkl/CA-SSD/output/once_models/03-20_ctr-aware/ckpt/checkpoint_epoch_80.pth --batch_size 1 --vis_v1)
 
-[//]: # (```)
 
-[//]: # ()
-[//]: # (## 测试CA-SSD)
-
-[//]: # (```shell)
-
-[//]: # (--cfg_file cfgs/once_models/CA-SSD_cams.yaml --ckpt /home/hdwu/work/qkl/CA-SSD/output/once_models/CA-SSD/03-27_cassd/ckpt/checkpoint_epoch_119.pth --batch_size 1 --vis_v1)
-
-[//]: # (```)
-
-CEMS模块与MLGA模块代码
+If you want to test our reproduced IA-SSD, please run the following commands after setting up the environment.
+```
+python train.py --cfg_file cfgs/once_models/IA-SSD-ctr_aware.yaml 
+```
+If you wish to test IA-SSD with CEMS and MLGA modules, please use the following commands:
+```
+python train.py --cfg_file --cfg_file cfgs/once_models/CA-SSD_cams.yaml 
+```
+The voxel-based code is currently being integrated into the unified project, as it was adapted from the SAFDNet open-source implementation. Please stay tuned for updates.
