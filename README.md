@@ -10,10 +10,12 @@ This project is based on OpenPCDet. So please refer to INSTALL.md and GETTING_ST
 
 If you want to try our reproduced IA-SSD, please run the following commands after setting up the environment.
 ```
+cd tools
 python train.py --cfg_file cfgs/once_models/IA-SSD-ctr_aware.yaml 
 ```
 If you wish to try IA-SSD with CEMS and MLGA modules, please use the following commands:
 ```
+cd tools
 python train.py --cfg_file cfgs/once_models/CA-SSD_cams.yaml 
 ```
 
@@ -21,13 +23,30 @@ python train.py --cfg_file cfgs/once_models/CA-SSD_cams.yaml
 
 If you want to try origin SECOND, please run the following commands after setting up the environment.
 ```
-python train.py --cfg_file --cfg_file cfgs/once_models/second.yaml 
+cd tools
+python train.py --cfg_file cfgs/once_models/second.yaml 
 ```
 
 If you want to try SECOND with CEMS and MLGA modules, please run the following commands after setting up the environment.
 ```
-python train.py --cfg_file --cfg_file cfgs/once_models/second_with_cems_mlga.yaml 
+cd tools
+python train.py --cfg_file cfgs/once_models/second_with_cems_mlga.yaml 
+```
+
+
+If you want to try origin SAFDNet, please run the following commands after setting up the environment.
+```
+cd tools
+python train.py --cfg_file cfgs/waymo_models/safdnet.yaml
+```
+
+If you want to try SAFDNet with CEMS and MLGA modules, please run the following commands after setting up the environment.
+```
+cd tools
+python train.py --cfg_file cfgs/waymo_models/safdnet_cems_mlga.yaml
 ```
 
 If you want to use the CEMS and MLGA modules in other networks, please refer to the module configuration methods in these two configuration files: second_cems_mlga.yamland CA-SSD_cams.yaml.
+
+
 
