@@ -24,7 +24,7 @@ If you want to try origin SECOND, please run the following commands after settin
 python train.py --cfg_file --cfg_file cfgs/once_models/second.yaml 
 ```
 
-If you want to try origin SECOND with CEMS and MLGA modules, please run the following commands after setting up the environment.
+If you want to try SECOND with CEMS and MLGA modules, please run the following commands after setting up the environment.
 ```
 python train.py --cfg_file --cfg_file cfgs/once_models/second_cems_mlga.yaml 
 ```
