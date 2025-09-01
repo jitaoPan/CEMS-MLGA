@@ -4,9 +4,10 @@ This is the open-source code for the paper "Class-Enhanced Multi-Sampling and Mu
 
 ![img.png](img.png)
 
-This project is based on OpenPCDet. So please refer to INSTALL.md and GETTING_STARTED.md for the installation and usage, respectively
+This project is based on OpenPCDet. So please refer to INSTALL.md and GETTING_STARTED.md for the installation and usage, respectively。
 
 
+Since the original networks were scattered across different OpenPCDet projects, we are still in the process of integrating all the code. Thank you for your patience.
 
 If you want to try our reproduced IA-SSD, please run the following commands after setting up the environment.
 ```
