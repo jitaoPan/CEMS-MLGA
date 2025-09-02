@@ -119,6 +119,60 @@ class IASSD_Backbone(nn.Module):
         features = (pc[:, 4:].contiguous() if pc.size(-1) > 4 else None)
         return batch_idx, xyz, features
 
+    def suppress_non_essential_keypoints(self, centers, centers_features, cls_preds, batch_idx):
+        if not self.suppress_keypoints:
+            return centers, centers_features, cls_preds, batch_idx
+
+        batch_size = batch_idx.max().item() + 1
+        filtered_centers = []
+        filtered_features = []
+        filtered_cls_preds = []
+        filtered_batch_idx = []
+
+        for bs_idx in range(batch_size):
+            mask = (batch_idx == bs_idx)
+            bs_centers = centers[mask]
+            bs_features = centers_features[mask]
+            bs_cls_preds = cls_preds[mask]
+
+            cls_scores, cls_labels = torch.max(bs_cls_preds, dim=1)
+
+            sorted_indices = torch.argsort(cls_scores, descending=True)
+            remaining_indices = sorted_indices.clone().tolist()
+            final_indices = []
+
+            while len(remaining_indices) > 0:
+                current_idx = remaining_indices.pop(0)
+                final_indices.append(current_idx)
+
+                if len(remaining_indices) == 0:
+                    break
+
+                current_class = cls_labels[current_idx].item()
+                current_pos = bs_centers[current_idx]
+                radius = self.class_radius.get(current_class, 0.6)
+
+                distances = torch.norm(bs_centers[remaining_indices] - current_pos, dim=1)
+
+                same_class_mask = cls_labels[remaining_indices] == current_class
+                within_radius_mask = distances < radius
+                remove_mask = same_class_mask & within_radius_mask
+
+                remove_indices = torch.where(remove_mask)[0]
+                for idx in sorted(remove_indices.tolist(), reverse=True):
+                    del remaining_indices[idx]
+
+            filtered_centers.append(bs_centers[final_indices])
+            filtered_features.append(bs_features[final_indices])
+            filtered_cls_preds.append(bs_cls_preds[final_indices])
+            filtered_batch_idx.append(torch.full((len(final_indices),), bs_idx,
+                                                 dtype=torch.long, device=batch_idx.device))
+
+        return (torch.cat(filtered_centers, dim=0),
+                torch.cat(filtered_features, dim=0),
+                torch.cat(filtered_cls_preds, dim=0),
+                torch.cat(filtered_batch_idx, dim=0))
+
     def forward(self, batch_dict):
         """
         Args:
@@ -209,6 +263,19 @@ class IASSD_Backbone(nn.Module):
         batch_dict['encoder_coords'] = encoder_coords
         batch_dict['sa_ins_preds'] = sa_ins_preds
         batch_dict['encoder_features'] = encoder_features
+        # if not self.training:
+        #     # Apply non-essential key point suppression
+        #     centers_features = encoder_features[-1].permute(0, 2, 1).contiguous().view(-1, encoder_features[-1].shape[1])
+        #     cls_preds = sa_ins_preds[-1][..., 1:] if len(sa_ins_preds[-1]) > 0 else None
+        #     if cls_preds is not None and self.suppress_keypoints:
+        #         centers, centers_features, cls_preds, ctr_batch_idx = self.suppress_non_essential_keypoints(
+        #             centers.view(-1, 3), centers_features, cls_preds.view(-1, cls_preds.shape[-1]), ctr_batch_idx
+        #         )
+        #
+        #         # Update batch_dict with filtered results
+        #         batch_dict['centers'] = torch.cat((ctr_batch_idx[:, None].float(), centers), dim=1)
+        #         batch_dict['centers_features'] = centers_features
+        #         batch_dict['ctr_batch_idx'] = ctr_batch_idx
 
         # save per frame
         if self.model_cfg.SA_CONFIG.get('SAVE_SAMPLE_LIST', False) and not self.training:
