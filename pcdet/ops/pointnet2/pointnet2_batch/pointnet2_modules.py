@@ -710,6 +710,7 @@ class MultiLevelGraphAttention(nn.Module):
         """
         old_features = features
         try:
+            # there is still some bug while moving,please wait.
             B, C, N = features.shape
             features = features.permute(0, 2, 1)
             offsets = self.offset_pred(features)
